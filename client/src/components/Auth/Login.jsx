@@ -78,6 +78,9 @@ export default function Login() {
               <p className="text-center mt-3 mb-0">
                 Don&apos;t have an account? <Link to="/register">Register</Link>
               </p>
+              <p className="text-center mt-2 mb-0">
+                <Link to="/about">About Us</Link>
+              </p>
             </div>
           </div>
         </div>

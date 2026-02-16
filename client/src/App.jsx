@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Dashboard from './components/Dashboard/Dashboard';
+import About from './components/About/About';
 import { useAuth } from './context/AuthContext';
 
 function ProtectedRoute({ children }) {
@@ -75,6 +76,7 @@ export default function App() {
           </ProtectedRoute>
         )}
       />
+      <Route path="/about" element={<About />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

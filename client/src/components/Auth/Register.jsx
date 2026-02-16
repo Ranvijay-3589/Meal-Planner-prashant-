@@ -145,6 +145,9 @@ export default function Register() {
               <p className="text-center mt-3 mb-0">
                 Already have an account? <Link to="/login">Login</Link>
               </p>
+              <p className="text-center mt-2 mb-0">
+                <Link to="/about">About Us</Link>
+              </p>
             </div>
           </div>
         </div>

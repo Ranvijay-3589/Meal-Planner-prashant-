@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 export default function Dashboard() {
@@ -31,9 +31,14 @@ export default function Dashboard() {
                   <h1 className="h3 mb-1">Welcome to Meal Planner</h1>
                   <p className="text-muted mb-0">Your account details</p>
                 </div>
-                <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>
-                  Logout
-                </button>
+                <div className="d-flex gap-2">
+                  <Link to="/about" className="btn btn-outline-secondary">
+                    About Us
+                  </Link>
+                  <button type="button" className="btn btn-outline-danger" onClick={handleLogout}>
+                    Logout
+                  </button>
+                </div>
               </div>
 
               <div className="list-group">
