@@ -36,4 +36,10 @@ export const registerUser = (data) => api.post('/auth/register', data);
 export const loginUser = (data) => api.post('/auth/login', data);
 export const getMe = () => api.get('/auth/me');
 
+// Meal CRUD
+export const getMeals = () => api.get('/meals');
+export const createMeal = (data) => api.post('/meals', data);
+export const updateMeal = (id, data) => api.put(`/meals/${id}`, data);
+export const deleteMeal = (id) => api.delete(`/meals/${id}`);
+
 export default api;
