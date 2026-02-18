@@ -13,8 +13,20 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: process.env.CLIENT_URL || 'http://localhost:3000',
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
+
+// Strip subpath prefix if present (handles proxy path rewriting)
+// The deployed site at ranvijay.capricorn.online/prashant/ may forward
+// requests with /prashant/ prefix intact. This strips it so routes match.
+app.use((req, res, next) => {
+  if (req.url.startsWith('/prashant/') || req.url === '/prashant') {
+    req.url = req.url.replace(/^\/prashant/, '') || '/';
+  }
+  next();
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
