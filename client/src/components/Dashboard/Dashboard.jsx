@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
+import MealPlanner from '../MealPlanner/MealPlanner';
 
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
@@ -79,6 +80,13 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Weekly Meal Planner Table */}
+        <div className="row mt-4">
+          <div className="col-12">
+            <MealPlanner />
           </div>
         </div>
       </div>

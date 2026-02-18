@@ -1,4 +1,4 @@
-const { pool } = require('../config/database');
+const pool = require('../config/database');
 
 const VALID_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const VALID_MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner'];
