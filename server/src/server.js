@@ -14,12 +14,20 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+// Health/debug endpoint (no auth required)
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', routes: ['auth', 'meals'], timestamp: new Date().toISOString() });
+});
+app.get('/prashant/api/health', (req, res) => {
+  res.json({ status: 'ok', routes: ['auth', 'meals'], timestamp: new Date().toISOString() });
+});
+
 // API Routes - mount on both prefixed and unprefixed paths
-// The proxy may strip /prashant before forwarding
-app.use('/prashant/api/auth', authRoutes);
+// The proxy strips /prashant before forwarding, so /api/* is the primary path
 app.use('/api/auth', authRoutes);
-app.use('/prashant/api/meals', mealRoutes);
 app.use('/api/meals', mealRoutes);
+app.use('/prashant/api/auth', authRoutes);
+app.use('/prashant/api/meals', mealRoutes);
 
 // Serve React static files
 const clientBuildPath = path.join(__dirname, '../../client/build');
@@ -34,7 +42,7 @@ app.get('/prashant/*', (req, res) => {
   res.sendFile(path.join(clientBuildPath, 'index.html'));
 });
 
-app.get('*', (req, res, next) => {
+app.get('*', (req, res) => {
   if (req.path.startsWith('/api')) {
     return res.status(404).json({ message: 'API route not found' });
   }
@@ -78,5 +86,6 @@ async function initDB() {
 initDB().then(() => {
   app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+    console.log('Registered routes: /api/auth, /api/meals, /prashant/api/auth, /prashant/api/meals');
   });
 });

@@ -2,5 +2,12 @@
   "name": "meal-planner",
   "version": "1.0.0",
   "private": true,
-  "description": "Meal Planner - Weekly/Daily meal plan"
+  "description": "Meal Planner - Weekly/Daily meal plan",
+  "scripts": {
+    "install:server": "cd server && npm install --production",
+    "install:client": "cd client && npm install",
+    "postinstall": "cd server && npm install --production",
+    "build": "cd client && npm install && npm run build",
+    "start": "cd server && node src/server.js"
+  }
 }
