@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/prashant/static/css/main.3982bb5f.css",
+    "main.js": "/prashant/static/js/main.ed9011ea.js",
+    "index.html": "/prashant/index.html",
+    "main.3982bb5f.css.map": "/prashant/static/css/main.3982bb5f.css.map",
+    "main.ed9011ea.js.map": "/prashant/static/js/main.ed9011ea.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.3982bb5f.css",
+    "static/js/main.ed9011ea.js"
+  ]
+}
