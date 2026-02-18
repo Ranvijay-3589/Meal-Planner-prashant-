@@ -45,7 +45,7 @@ const PublicRoute = ({ children }) => {
 const App = () => {
   return (
     <AuthProvider>
-      <Router>
+      <Router basename="/prashant">
         <div className="min-vh-100 bg-light">
           <nav className="navbar navbar-dark bg-primary">
             <div className="container">
