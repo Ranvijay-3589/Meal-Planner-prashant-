@@ -14,7 +14,8 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// API Routes
+// API Routes - mount on both prefixed and unprefixed paths
+// The proxy may strip /prashant before forwarding
 app.use('/prashant/api/auth', authRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/prashant/api/meals', mealRoutes);
@@ -23,10 +24,18 @@ app.use('/api/meals', mealRoutes);
 // Serve React static files
 const clientBuildPath = path.join(__dirname, '../../client/build');
 app.use('/prashant', express.static(clientBuildPath));
+app.use(express.static(clientBuildPath));
 
 // Handle React routing (skip API paths)
 app.get('/prashant/*', (req, res) => {
   if (req.path.startsWith('/prashant/api')) {
+    return res.status(404).json({ message: 'API route not found' });
+  }
+  res.sendFile(path.join(clientBuildPath, 'index.html'));
+});
+
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api')) {
     return res.status(404).json({ message: 'API route not found' });
   }
   res.sendFile(path.join(clientBuildPath, 'index.html'));

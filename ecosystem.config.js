@@ -5,7 +5,7 @@ module.exports = {
     cwd: '/home/cmdcmd007/projects/meal-planner',
     env: {
       NODE_ENV: 'production',
-      PORT: 5002,
+      PORT: 5000,
     },
     instances: 1,
     autorestart: true,
