@@ -10,31 +10,52 @@ const pool = require('./config/database');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// CORS - allow all origins for production compatibility
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
-// Health/debug endpoint (no auth required)
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'ok', routes: ['auth', 'meals'], timestamp: new Date().toISOString() });
-});
-app.get('/prashant/api/health', (req, res) => {
-  res.json({ status: 'ok', routes: ['auth', 'meals'], timestamp: new Date().toISOString() });
+// Log all requests for debugging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.path}`);
+  next();
 });
 
-// API Routes - mount on both prefixed and unprefixed paths
-// The proxy strips /prashant before forwarding, so /api/* is the primary path
+// ============================================
+// API ROUTES - MUST come before static serving
+// ============================================
+
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', routes: ['auth', 'meals'], port: PORT, timestamp: new Date().toISOString() });
+});
+
+// Auth routes
 app.use('/api/auth', authRoutes);
+
+// Meal routes
 app.use('/api/meals', mealRoutes);
+
+// Also mount with /prashant prefix (in case proxy doesn't strip it)
+app.get('/prashant/api/health', (req, res) => {
+  res.json({ status: 'ok', routes: ['auth', 'meals'], port: PORT, timestamp: new Date().toISOString() });
+});
 app.use('/prashant/api/auth', authRoutes);
 app.use('/prashant/api/meals', mealRoutes);
 
-// Serve React static files
+// ============================================
+// STATIC FILES - After API routes
+// ============================================
 const clientBuildPath = path.join(__dirname, '../../client/build');
 app.use('/prashant', express.static(clientBuildPath));
 app.use(express.static(clientBuildPath));
 
-// Handle React routing (skip API paths)
+// React SPA catch-all (skip API paths)
 app.get('/prashant/*', (req, res) => {
   if (req.path.startsWith('/prashant/api')) {
     return res.status(404).json({ message: 'API route not found' });
@@ -77,7 +98,7 @@ async function initDB() {
       );
     `);
 
-    console.log('Database tables initialized');
+    console.log('Database tables initialized successfully');
   } catch (err) {
     console.error('Database init error:', err.message);
   }
@@ -85,7 +106,7 @@ async function initDB() {
 
 initDB().then(() => {
   app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-    console.log('Registered routes: /api/auth, /api/meals, /prashant/api/auth, /prashant/api/meals');
+    console.log(`Meal Planner API running on port ${PORT}`);
+    console.log('Routes: /api/auth, /api/meals, /prashant/api/auth, /prashant/api/meals');
   });
 });

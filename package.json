@@ -7,7 +7,8 @@
     "install:server": "cd server && npm install --production",
     "install:client": "cd client && npm install",
     "postinstall": "cd server && npm install --production",
-    "build": "cd client && npm install && npm run build",
-    "start": "cd server && node src/server.js"
+    "build": "cd client && npm install && npm run build && npm run restart-server",
+    "start": "cd server && node src/server.js",
+    "restart-server": "npx pm2 delete meal-planner-api 2>/dev/null; npx pm2 start ecosystem.config.js && npx pm2 save"
   }
 }

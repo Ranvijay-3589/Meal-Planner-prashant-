@@ -7,6 +7,7 @@ module.exports = {
       PORT: 5000,
     },
     instances: 1,
+    exec_mode: 'fork',
     autorestart: true,
     watch: ['server/src'],
     watch_delay: 1000,
