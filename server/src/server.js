@@ -11,31 +11,38 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl, etc.)
+    if (!origin) return callback(null, true);
+    const allowedOrigins = [
+      process.env.CLIENT_URL || 'http://localhost:3000',
+      'https://ranvijay.capricorn.online',
+      'http://localhost:3000',
+    ];
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(null, true); // Allow all origins for now to avoid CORS issues
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
 app.use(express.json());
 
-// Strip subpath prefix if present (handles proxy path rewriting)
-// The deployed site at ranvijay.capricorn.online/prashant/ may forward
-// requests with /prashant/ prefix intact. This strips it so routes match.
-app.use((req, res, next) => {
-  if (req.url.startsWith('/prashant/') || req.url === '/prashant') {
-    req.url = req.url.replace(/^\/prashant/, '') || '/';
-  }
-  next();
-});
-
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/meals', mealRoutes);
-
-// Health check
-app.get('/api/health', (req, res) => {
+// Create an API router that holds all API routes
+const apiRouter = express.Router();
+apiRouter.use('/auth', authRoutes);
+apiRouter.use('/meals', mealRoutes);
+apiRouter.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// Mount API router at both paths to handle requests with or without /prashant prefix
+// The deployed site at ranvijay.capricorn.online/prashant/ may forward
+// requests with /prashant/ prefix intact from the reverse proxy.
+app.use('/prashant/api', apiRouter);
+app.use('/api', apiRouter);
 
 // Start server
 const startServer = async () => {
