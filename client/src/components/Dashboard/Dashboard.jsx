@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import MealPlanner from '../MealPlanner/MealPlanner';
@@ -6,9 +6,12 @@ import MealPlanner from '../MealPlanner/MealPlanner';
 const Dashboard = () => {
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    setLoggingOut(true);
+    await logout();
     navigate('/login');
   };
 
@@ -30,7 +33,7 @@ const Dashboard = () => {
             <span className="text-white me-3">Hi, {user?.username}</span>
             <button
               className="btn btn-outline-light btn-sm"
-              onClick={handleLogout}
+              onClick={() => setShowLogoutModal(true)}
             >
               Logout
             </button>
@@ -90,6 +93,44 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Logout Confirmation Modal */}
+      {showLogoutModal && (
+        <div className="modal d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content">
+              <div className="modal-header border-0 pb-0">
+                <h5 className="modal-title">Confirm Logout</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowLogoutModal(false)}
+                  disabled={loggingOut}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p className="mb-0">Are you sure you want to logout?</p>
+              </div>
+              <div className="modal-footer border-0 pt-0">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setShowLogoutModal(false)}
+                  disabled={loggingOut}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleLogout}
+                  disabled={loggingOut}
+                >
+                  {loggingOut ? 'Logging out...' : 'Logout'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

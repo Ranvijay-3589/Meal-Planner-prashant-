@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/prashant/static/css/main.3982bb5f.css",
-    "main.js": "/prashant/static/js/main.1f285948.js",
+    "main.js": "/prashant/static/js/main.27fcfff3.js",
     "index.html": "/prashant/index.html",
     "main.3982bb5f.css.map": "/prashant/static/css/main.3982bb5f.css.map",
-    "main.1f285948.js.map": "/prashant/static/js/main.1f285948.js.map"
+    "main.27fcfff3.js.map": "/prashant/static/js/main.27fcfff3.js.map"
   },
   "entrypoints": [
     "static/css/main.3982bb5f.css",
-    "static/js/main.1f285948.js"
+    "static/js/main.27fcfff3.js"
   ]
 }

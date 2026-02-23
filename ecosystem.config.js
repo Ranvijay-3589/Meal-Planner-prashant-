@@ -4,7 +4,7 @@ module.exports = {
     script: 'server/src/server.js',
     env: {
       NODE_ENV: 'production',
-      PORT: 5000,
+      PORT: 5004,
     },
     instances: 1,
     exec_mode: 'fork',

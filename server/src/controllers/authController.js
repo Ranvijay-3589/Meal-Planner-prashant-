@@ -118,6 +118,20 @@ exports.login = async (req, res) => {
   }
 };
 
+exports.logout = async (req, res) => {
+  try {
+    await pool.query(
+      'UPDATE meal_planner_users SET last_login = CURRENT_TIMESTAMP WHERE user_id = $1',
+      [req.user.id]
+    );
+
+    res.json({ message: 'Logged out successfully' });
+  } catch (err) {
+    console.error('Logout error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 exports.getMe = async (req, res) => {
   try {
     const result = await pool.query(
